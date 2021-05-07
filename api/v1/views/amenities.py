@@ -30,3 +30,16 @@ def return_amenity_obj(amenity_id):
     if obj_amenity:
         return jsonify(obj_amenity.to_dict())
     abort(404)
+
+
+@app_views.route("/amenities/<amenity_id>", methods=["DELETE"],
+                 strict_slashes=False)
+def delete_amenity_obj(amenity_id):
+    """ deletes a amenity object by id. """
+    obj_amenity = storage.get(Amenity, amenity_id)
+    if obj_amenity:
+        key = 'Amenity.' + obj_amenity.id
+        storage.delete(obj_amenity)
+        storage.save()
+        return({})
+    abort(404)
