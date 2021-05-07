@@ -89,21 +89,22 @@ class TestFileStorage(unittest.TestCase):
 
     def test_get(self):
         """Test get method"""
-        state_1 = State(name="California")
-        # storage = DBStorage()
+        new_attr = {'name': 'California'}
+        state_1 = State(**new_attr)
         state_1.save()
         get_obj = models.storage.get(State, state_1.id)
         self.assertEqual(get_obj.id, state_1.id)
 
     def test_count(self):
         """Test count method"""
-        state_1 = State(name="Texas")
-        # storage = DBStorage()
+        new_attr = {'name': 'Texas'}
+        state_1 = State(**new_attr)
         state_1.save()
         objs = models.storage.all()
         numbers = models.storage.count()
         self.assertEqual(numbers, len(objs))
-        state_2 = State(name="Florida")
+        new_attr = {'name': 'Florida'}
+        state_2 = State(**new_attr)
         state_2.save()
         objs = models.storage.all()
         numbers_state = models.storage.count(State)
