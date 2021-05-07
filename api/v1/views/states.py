@@ -37,7 +37,6 @@ def delete_state_obj(state_id):
     """ deletes a states object by id. """
     obj_state = storage.get(State, state_id)
     if obj_state:
-        key = 'State.' + obj_state.id
         storage.delete(obj_state)
         storage.save()
         return({})
