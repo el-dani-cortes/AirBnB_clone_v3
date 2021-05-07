@@ -66,7 +66,7 @@ def update_state_obj(state_id):
         data = request.get_json()
     except:
         abort(400, 'Not a JSON')
-    ignored_keys = ["id", "state_id", "created_at", "updated_at"]
+    ignored_keys = ["id", "created_at", "updated_at"]
     state_obj = storage.get(State, state_id)
     if state_obj:
         for key, value in data.items():
