@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route Blueprints. """
-from api.v1.views.__init__ import app_views
+from api.v1.views import app_views
 from models.amenity import Amenity
 from models.review import Review
 from models.place import Place

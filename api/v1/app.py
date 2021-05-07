@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Flask module, returs status of the api. """
-from api.v1.views.__init__ import app_views
+from api.v1.views import app_views
 from flask import Flask, jsonify, make_response
 from models import storage
 from os import getenv as env
