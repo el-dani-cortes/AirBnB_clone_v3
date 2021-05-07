@@ -21,6 +21,7 @@ def return_list_all_states():
         list_all_states.append(obj.to_dict())
     return(jsonify(list_all_states))
 
+
 @app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
 def return_state_obj(state_id):
     """ Returns a states object. """
@@ -29,7 +30,9 @@ def return_state_obj(state_id):
         return jsonify(obj_state.to_dict())
     abort(404)
 
-@app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
+
+@app_views.route("/states/<state_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_state_obj(state_id):
     """ deletes a states object by id. """
     obj_state = storage.get(State, state_id)
@@ -63,10 +66,12 @@ def update_state_obj(state_id):
         data = request.get_json()
     except:
         abort(400, 'Not a JSON')
+    ignored_keys = ["id", "state_id", "created_at", "updated_at"]
     state_obj = storage.get(State, state_id)
     if state_obj:
         for key, value in data.items():
-            setattr(state_obj, key, value)
-        state_obj.save()
+            if key not in ignored_keys:
+                setattr(state_obj, key, value)
+                state_obj.save()
         return(jsonify(state_obj.to_dict()))
     abort(404)
