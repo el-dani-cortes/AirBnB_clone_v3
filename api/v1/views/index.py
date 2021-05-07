@@ -8,13 +8,14 @@ from models.state import State
 from models.city import City
 from models.user import User
 from models import storage
+from flask import jsonify
 
 
 @app_views.route("/status", strict_slashes=False)
 def return_status():
     """ Returns the status of the api. """
     status = {"status": "OK"}
-    return(status)
+    return(jsonify(status))
 
 
 @app_views.route("/stats", strict_slashes=False)
@@ -27,4 +28,4 @@ def return_stats():
     for key, obj in classes.items():
         stats[key] = storage.count(obj)
 
-    return(stats)
+    return(jsonify(stats))
