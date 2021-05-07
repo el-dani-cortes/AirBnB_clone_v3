@@ -20,3 +20,13 @@ def return_list_all_amenities():
     for obj in all_amenities.values():
         list_all_amenities.append(obj.to_dict())
     return(jsonify(list_all_amenities))
+
+
+@app_views.route("/amenities/<amenity_id>", methods=["GET"],
+                 strict_slashes=False)
+def return_amenity_obj(amenity_id):
+    """ Returns an Amenity object. """
+    obj_amenity = storage.get(Amenity, amenity_id)
+    if obj_amenity:
+        return jsonify(obj_amenity.to_dict())
+    abort(404)
