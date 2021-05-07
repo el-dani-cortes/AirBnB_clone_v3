@@ -44,3 +44,21 @@ def delete_city_obj(city_id):
         storage.save()
         return({})
     abort(404)
+
+
+# Create city linked to given stated_id. - - - - - - - - - - - - - - - - - - -|
+@app_views.route("/states/<state_id>/cities", methods=["POST"],
+                 strict_slashes=False)
+def create_city_obj(state_id):
+    try:
+        data = request.get_json()
+    except:
+        abort(400, 'Not a JSON')
+    if 'name' not in data.keys():
+        abort(400, "Missing name")
+    if storage.get(State, state_id) is None:
+        abort(404)
+    data["state_id"] = state_id
+    city = City(**data)
+    city.save()
+    return(jsonify(city.to_dict()), 201)
