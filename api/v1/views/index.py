@@ -10,14 +10,14 @@ from models.user import User
 from models import storage
 
 
-@app_views.route("/status")
+@app_views.route("/status", strict_slashes=False)
 def return_status():
     """ Returns the status of the api. """
     status = {"status": "OK"}
     return(status)
 
 
-@app_views.route("/stats")
+@app_views.route("/stats", strict_slashes=False)
 def return_stats():
     """ Returns the stats in numbers of the objects available. """
     classes = {"amenities": Amenity, "cities": City, "places": Place,
