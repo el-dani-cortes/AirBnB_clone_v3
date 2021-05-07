@@ -50,6 +50,7 @@ def delete_city_obj(city_id):
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
                  strict_slashes=False)
 def create_city_obj(state_id):
+    """ Creates a new City linked to a State.  """
     try:
         data = request.get_json()
     except:
@@ -62,3 +63,23 @@ def create_city_obj(state_id):
     city = City(**data)
     city.save()
     return(jsonify(city.to_dict()), 201)
+
+
+# Update a city by its id. - - - - - - - - - - - - - - - - - - - - - - - - - -|
+@app_views.route("/cities/<city_id>", methods=["PUT"],
+                 strict_slashes=False)
+def update_city_obj(city_id):
+    """ Updates a city by its id. """
+    try:
+        data = request.get_json()
+    except:
+        abort(400, 'Not a JSON')
+    ignored_keys = ["id", "state_id", "created_at", "updated_at"]
+    city = storage.get(City, city_id)
+    if city:
+        for key, value in data.items():
+            if key not in ignored_keys:
+                setattr(city, key, value)
+                city.save()
+        return(jsonify(city.to_dict()))
+    abort(404)
