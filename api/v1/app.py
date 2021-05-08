@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Flask module, returs status of the api. """
+""" Flask module, returns status of the api. """
 from api.v1.views import app_views
 from flask import Flask
 from models import storage

@@ -9,8 +9,7 @@ from flask import request, jsonify, abort
 
 
 # Cities by state route. - - - - - - - - - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/states/<state_id>/cities", methods=["GET"],
-                 strict_slashes=False)
+@app_views.route("/states/<state_id>/cities", methods=["GET"])
 def return_list_all_cities_by_state(state_id):
     """ Returns cities by state id. """
     state = storage.get(State, state_id)
@@ -24,7 +23,7 @@ def return_list_all_cities_by_state(state_id):
 
 
 # City by id route. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
-@app_views.route("/cities/<city_id>", methods=["GET"], strict_slashes=False)
+@app_views.route("/cities/<city_id>", methods=["GET"])
 def return_city_by_id(city_id):
     """ Returns city by id. """
     city = storage.get(City, city_id)
@@ -34,8 +33,7 @@ def return_city_by_id(city_id):
 
 
 # City by id DELETE route. - - - - - - - - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/cities/<city_id>", methods=["DELETE"],
-                 strict_slashes=False)
+@app_views.route("/cities/<city_id>", methods=["DELETE"])
 def delete_city_obj(city_id):
     """ Deletes a city object by id. """
     city = storage.get(City, city_id)
@@ -47,8 +45,7 @@ def delete_city_obj(city_id):
 
 
 # Create city linked to given stated_id. - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/states/<state_id>/cities", methods=["POST"],
-                 strict_slashes=False)
+@app_views.route("/states/<state_id>/cities", methods=["POST"])
 def create_city_obj(state_id):
     """ Creates a new City linked to a State.  """
     try:
@@ -66,8 +63,7 @@ def create_city_obj(state_id):
 
 
 # Update a city by its id. - - - - - - - - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/cities/<city_id>", methods=["PUT"],
-                 strict_slashes=False)
+@app_views.route("/cities/<city_id>", methods=["PUT"])
 def update_city_obj(city_id):
     """ Updates a city by its id. """
     try:
