@@ -14,13 +14,13 @@ def return_all_users():
     if users is None:
         abort(404)
     list_of_json_users = []
-    for user in users:
-        list_of_json_users.append(city.to_dict())
+    for user in users.values():
+        list_of_json_users.append(user.to_dict())
     return(jsonify(list_of_json_users))
 
 
 # User by id route. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - |
-@app_views.route("/user/<user_id>", methods=["GET"])
+@app_views.route("/users/<user_id>", methods=["GET"])
 def return_user_by_id(user_id):
     """ Returns user by id. """
     user = storage.get(User, user_id)
@@ -42,8 +42,8 @@ def delete_user(user_id):
 
 
 # Create user. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/api/v1/users", methods=["POST"])
-def create_city_obj():
+@app_views.route("/users", methods=["POST"])
+def create_user_obj():
     """ Creates a new City linked to a State.  """
     data = request.get_json()
     if data is None:
@@ -52,16 +52,14 @@ def create_city_obj():
         abort(400, "Missing email")
     if 'password' not in data.keys():
         abort(400, "Missing password")
-    if storage.get(User, ) is None:
-        abort(404)
     user = User(**data)
     user.save()
     return(user.to_dict(), 201)
 
 
 # Update a city by its id. - - - - - - - - - - - - - - - - - - - - - - - - - -|
-@app_views.route("/api/v1/users/<user_id>", methods=["PUT"])
-def update_city_obj(user_id):
+@app_views.route("/users/<user_id>", methods=["PUT"])
+def update_user_obj(user_id):
     """ Updates a city by its id. """
     data = request.get_json()
     if data is None:
