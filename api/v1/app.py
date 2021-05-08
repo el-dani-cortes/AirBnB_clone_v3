@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ Flask module, returs status of the api. """
-from api.v1.views import app_views
-from flask import Flask, jsonify, make_response
 from models import storage
+from flask import Flask, jsonify, make_response
 from os import getenv as env
+from api.v1.views import app_views
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -17,7 +17,7 @@ def close_connection(exception):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    """ Error handler 404"""
+    """ Error handler 404, for Not found response."""
     return make_response(jsonify({"error": "Not found"}), 404)
 
 if __name__ == "__main__":
