@@ -50,21 +50,21 @@ def delete_review_obj(review_id):
                  strict_slashes=False)
 def create_review_obj(place_id):
     """ Creates a new review linked to a place. """
-    data = request.get_json()
     if storage.get(Place, place_id) is None:
         abort(404)
+    data = request.get_json()
     if data is None:
-        make_response('Not a JSON', 400)
-    if 'user_id' not in data.keys():
+        return(make_response('Not a JSON', 400))
+    if 'user_id' not in data:
         abort(400, 'Missing user_id')
     if storage.get(User, data['user_id']) is None:
         abort(404)
-    if 'text' not in data.keys():
+    if 'text' not in data:
         abort(400, 'Missing text')
     data['place_id'] = place_id
     review = Review(**data)
     review.save()
-    return(jsonify(review.to_dict()), 201)
+    return(make_response(jsonify(review.to_dict()), 201))
 
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"],
@@ -76,10 +76,10 @@ def update_review_obj(review_id):
         abort(404)
     data = request.get_json()
     if data is None:
-        make_response('Not a JSON', 400)
+        return(make_response('Not a JSON', 400))
     ignored_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
     for key, value in data.items():
         if key not in ignored_keys:
             setattr(review, key, value)
-    review.save()
-    return(jsonify(review.to_dict()), 200)
+    storage.save()
+    return(make_response(jsonify(review.to_dict()), 200))
