@@ -51,18 +51,16 @@ def delete_review_obj(review_id):
 def create_review_obj(place_id):
     """ Creates a new review linked to a place. """
     data = request.get_json()
-    if data is None:
-        abort(400, 'Not a JSON')
-    if 'name' not in data.keys():
-        abort(400, 'Missing name')
-    if 'user_id' not in data.keys():
-        abort(400, 'Missing user_id')
-    if 'text' not in data.keys():
-        abort(400, 'Missing text')
     if storage.get(Place, place_id) is None:
         abort(404)
+    if data is None:
+        abort(400, 'Not a JSON')
+    if 'user_id' not in data.keys():
+        abort(400, 'Missing user_id')
     if storage.get(User, data['user_id']) is None:
         abort(404)
+    if 'text' not in data.keys():
+        abort(400, 'Missing text')
     data['place_id'] = place_id
     review = Review(**data)
     review.save()
@@ -73,15 +71,15 @@ def create_review_obj(place_id):
                  strict_slashes=False)
 def update_review_obj(review_id):
     """ Updates a review by its id. """
+    review = storage.get(Review, review_id)
+    if review if None:
+        abort(404)
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
     ignored_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
-    review = storage.get(Review, review_id)
-    if review:
-        for key, value in data.items():
-            if key not in ignored_keys:
-                setattr(review, key, value)
-                review.save()
+    for key, value in data.items():
+        if key not in ignored_keys:
+            setattr(review, key, value)
+            review.save()
         return(jsonify(review.to_dict()))
-    abort(404)
