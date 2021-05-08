@@ -7,7 +7,6 @@ from models.place import Place
 from models.user import User
 from models import storage
 from models.review import Review
-from api.v1.app import app
 from flask import request, jsonify, abort, make_response
 
 
@@ -68,37 +67,19 @@ def create_review_obj(place_id):
     return(make_response(jsonify(review.to_dict()), 201))
 
 
-@app_views.route('/reviews/<review_id>', methods=['PUT'],
+@app_views.route("/reviews/<review_id>", methods=["PUT"],
                  strict_slashes=False)
-def reviews_put(review_id=None):
-    """ States PUT route """
-    ignore_keys = ['id', 'created_at', 'updated_at', 'place_id', 'user_id']
-    obj = request.get_json()
-    if obj is None:
-        return make_response("Not a JSON", 400)
+def update_review_obj(review_id):
+    """ Updates a review by its id. """
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    for k, v in obj.items():
-        if k not in ignore_keys:
-            setattr(review, k, v)
+    data = request.get_json()
+    if data is None:
+        return(make_response('Not a JSON', 400))
+    ignored_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
+    for key, value in data.items():
+        if key not in ignored_keys:
+            setattr(review, key, value)
     storage.save()
-    return make_response(jsonify(review.to_dict()), 200)
-
-
-# @app_views.route("/reviews/<review_id>", methods=["PUT"],
-#                  strict_slashes=False)
-# def update_review_obj(review_id):
-#     """ Updates a review by its id. """
-#     review = storage.get(Review, review_id)
-#     if review is None:
-#         abort(404)
-#     data = request.get_json()
-#     if data is None:
-#         return(make_response('Not a JSON', 400))
-#     ignored_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
-#     for key, value in data.items():
-#         if key not in ignored_keys:
-#             setattr(review, key, value)
-#     storage.save()
-#     return(make_response(jsonify(review.to_dict()), 200))
+    return(make_response(jsonify(review.to_dict()), 200))
