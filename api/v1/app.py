@@ -18,7 +18,7 @@ def close_connection(exception):
 @app.errorhandler(404)
 def page_not_found(e):
     """ Error handler 404, for Not found response."""
-    return make_response({"error": "Not found"}, 404)
+    return {"error": "Not found"}, 404
 
 if __name__ == "__main__":
     host = "0.0.0.0"
@@ -26,5 +26,5 @@ if __name__ == "__main__":
     if env("HBNB_API_HOST"):
         host = env("HBNB_API_HOST")
     if env("HBNB_API_PORT"):
-        port = env("HBNB_API_PORT")
+        port = int(env("HBNB_API_PORT"))
     app.run(host=host, port=port, threaded=True)
