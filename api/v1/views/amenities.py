@@ -48,9 +48,8 @@ def delete_amenity_obj(amenity_id):
 @app_views.route("/amenities", methods=["POST"], strict_slashes=False)
 def create_amenity_obj():
     """ Creates a Amenity object. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     if 'name' not in data.keys():
         abort(400, "Missing name")
@@ -64,9 +63,8 @@ def create_amenity_obj():
                  strict_slashes=False)
 def update_amenity_obj(amenity_id):
     """ Updates an Amenity object. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     ignored_keys = ["id", "created_at", "updated_at"]
     amenity_obj = storage.get(Amenity, amenity_id)
