@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ Flask module, returs status of the api. """
-from models import storage
-from flask import Flask, jsonify, make_response
-from os import getenv as env
 from api.v1.views import app_views
+from flask import Flask
+from models import storage
+from os import getenv as env
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
