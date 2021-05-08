@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to states. """
-from api.v1.views import app_views
 from flask import request, jsonify, abort
+from api.v1.views import app_views
 from models.state import State
 from models import storage
 

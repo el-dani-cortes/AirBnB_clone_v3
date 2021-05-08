@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to places. """
-from api.v1.views.__init__ import app_views
+from flask import request, jsonify, abort
+from api.v1.views import app_views
+from models.place import Place
 from models.state import State
 from models.city import City
-from models.place import Place
 from models.user import User
 from models import storage
-from api.v1.app import app
-from flask import request, jsonify, abort
 
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],

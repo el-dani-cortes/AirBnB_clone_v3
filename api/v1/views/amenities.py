@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to amenities. """
-from api.v1.views.__init__ import app_views
+from api.v1.views import app_views
 from models.amenity import Amenity
 from models.review import Review
 from models.place import Place
@@ -8,7 +8,7 @@ from models.state import State
 from models.city import City
 from models.user import User
 from models import storage
-from api.v1.app import app
+import api.v1.app
 from flask import request, jsonify, abort
 
 
