@@ -6,6 +6,7 @@ from models import storage
 from os import getenv as env
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 app.register_blueprint(app_views)
 
 
@@ -20,11 +21,8 @@ def page_not_found(e):
     """ Error handler 404, for Not found response."""
     return {"error": "Not found"}, 404
 
+
 if __name__ == "__main__":
-    host = "0.0.0.0"
-    port = "5000"
-    if env("HBNB_API_HOST"):
-        host = env("HBNB_API_HOST")
-    if env("HBNB_API_PORT"):
-        port = int(env("HBNB_API_PORT"))
+    host = env("HBNB_API_HOST", "0.0.0.0")
+    port = int(env("HBNB_API_PORT", "5000"))
     app.run(host=host, port=port, threaded=True)

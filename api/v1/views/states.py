@@ -1,18 +1,12 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to states. """
-from api.v1.views.__init__ import app_views
-from models.amenity import Amenity
-from models.review import Review
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.user import User
-from models import storage
-from api.v1.app import app
+from api.v1.views import app_views
 from flask import request, jsonify, abort
+from models.state import State
+from models import storage
 
 
-@app_views.route("/states", methods=["GET"], strict_slashes=False)
+@app_views.route("/states")
 def return_list_all_states():
     """ Returns list of states. """
     all_states = storage.all(State)
@@ -22,7 +16,7 @@ def return_list_all_states():
     return(jsonify(list_all_states))
 
 
-@app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
+@app_views.route("/states/<state_id>")
 def return_state_obj(state_id):
     """ Returns a states object. """
     obj_state = storage.get(State, state_id)
@@ -31,8 +25,7 @@ def return_state_obj(state_id):
     abort(404)
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"],
-                 strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["DELETE"])
 def delete_state_obj(state_id):
     """ deletes a states object by id. """
     obj_state = storage.get(State, state_id)
@@ -43,7 +36,7 @@ def delete_state_obj(state_id):
     abort(404)
 
 
-@app_views.route("/states", methods=["POST"], strict_slashes=False)
+@app_views.route("/states", methods=["POST"])
 def create_state_obj():
     """ Creates a State object. """
     try:
@@ -58,7 +51,7 @@ def create_state_obj():
         return(jsonify(state_obj.to_dict()), 201)
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["PUT"])
 def update_state_obj(state_id):
     """ Updates a State object. """
     try:
