@@ -81,5 +81,5 @@ def update_review_obj(review_id):
     for key, value in data.items():
         if key not in ignored_keys:
             setattr(review, key, value)
-            review.save()
-        return(jsonify(review.to_dict()))
+    review.save()
+    return(jsonify(review.to_dict()))
