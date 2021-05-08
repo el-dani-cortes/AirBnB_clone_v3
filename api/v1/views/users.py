@@ -54,9 +54,9 @@ def create_city_obj():
         abort(400, "Missing password")
     if storage.get(User, ) is None:
         abort(404)
-    city = City(**data)
-    city.save()
-    return(city.to_dict(), 201)
+    user = User(**data)
+    user.save()
+    return(user.to_dict(), 201)
 
 
 # Update a city by its id. - - - - - - - - - - - - - - - - - - - - - - - - - -|
