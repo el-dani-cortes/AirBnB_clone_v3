@@ -39,9 +39,8 @@ def delete_state_obj(state_id):
 @app_views.route("/states", methods=["POST"])
 def create_state_obj():
     """ Creates a State object. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     if 'name' not in data.keys():
         abort(400, "Missing name")
@@ -54,9 +53,8 @@ def create_state_obj():
 @app_views.route("/states/<state_id>", methods=["PUT"])
 def update_state_obj(state_id):
     """ Updates a State object. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     ignored_keys = ["id", "created_at", "updated_at"]
     state_obj = storage.get(State, state_id)
