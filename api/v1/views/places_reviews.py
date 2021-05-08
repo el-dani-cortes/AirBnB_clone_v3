@@ -11,41 +11,37 @@ from api.v1.app import app
 from flask import request, jsonify, abort, make_response
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+@app_views.route("/places/<place_id>/reviews", methods=["GET"],
                  strict_slashes=False)
-def route_users(place_id=None):
-    """ place route """
-    if place_id is not None:
-        place = storage.get(Place, place_id)
-        if place is None:
-            abort(404)
-        new_list = []
-        for review in place.reviews:
-            new_list.append(review.to_dict())
-        return jsonify(new_list)
-    abort(404)
-
-# @app_views.route("/places/<place_id>/reviews", methods=["GET"],
-#                  strict_slashes=False)
-# def return_list_all_reviews_by_city(place_id):
-#     """ Returns reviews by place id. """
-#     place = storage.get(Place, place_id)
-#     if place is None:
-#         abort(404)
-#     list_reviews = place.reviews
-#     list_of_json_reviews = []
-#     for review in list_reviews:
-#         list_of_json_reviews.append(review.to_dict())
-#     return(jsonify(list_of_json_reviews), 200)
+def return_list_all_reviews_by_city(place_id):
+    """ Returns reviews by place id. """
+    place = storage.get(Place, place_id)
+    if place is None:
+        abort(404)
+    list_reviews = place.reviews
+    list_of_json_reviews = []
+    for review in list_reviews:
+        list_of_json_reviews.append(review.to_dict())
+    return(jsonify(list_of_json_reviews), 200)
 
 
-@app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
-def return_review_by_id(review_id):
-    """ Returns review by id. """
+@app_views.route('/reviews/<review_id>', methods=['GET'],
+                 strict_slashes=False)
+def route_review(review_id=None):
+    """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    return(jsonify(review.to_dict()), 200)
+    return(review.to_dict())
+
+
+# @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
+# def return_review_by_id(review_id):
+#     """ Returns review by id. """
+#     review = storage.get(Review, review_id)
+#     if review is None:
+#         abort(404)
+#     return(jsonify(review.to_dict()), 200)
 
 
 @app_views.route("/reviews/<review_id>", methods=["DELETE"],
