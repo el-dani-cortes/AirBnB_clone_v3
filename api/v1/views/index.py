@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-""" Index module flask app """
-from models.amenity import Amenity
-from models import storage
-from models.state import State
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.user import User
+""" Module for storing indeces for the route Blueprints. """
 from api.v1.views import app_views
-from flask import Flask, jsonify
+from flask import jsonify
+from models.amenity import Amenity
+from models.city import City
+from models.review import Review
+from models.place import Place
+from models.state import State
+from models.user import User
+from models import storage
 
 
-@app_views.route('/status', strict_slashes=False)
-def route_status():
-    """route return status"""
-    return jsonify({"status": "OK"})
+@app_views.route("/status")
+def return_status():
+    """ Returns the status of the api. """
+    return({"status": "OK"})
 
 
-@app_views.route('/stats', strict_slashes=False)
-def statsRoute():
-    """route prub"""
-    dircount = {}
-    dir_clases = {
-        "amenities": Amenity,
-        "cities": City,
-        "places": Place,
-        "reviews": Review,
-        "states": State,
-        "users": User
-    }
-    for key, value in dir_clases.items():
-        dircount[key] = storage.count(value)
-    return jsonify(dircount)
+@app_views.route("/stats")
+def return_stats():
+    """ Returns the stats in numbers of the objects available. """
+    classes = {"amenities": Amenity, "cities": City, "places": Place,
+               "reviews": Review, "states": State, "users": User}
+    stats = {}
 
-if __name__ == "__main__":
-    pass
+    for key, obj in classes.items():
+        stats[key] = storage.count(obj)
+
+    return(jsonify(stats))
