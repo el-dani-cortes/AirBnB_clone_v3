@@ -48,9 +48,8 @@ def delete_place_obj(place_id):
                  strict_slashes=False)
 def create_place_obj(city_id):
     """ Creates a new place linked to a City. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     if 'name' not in data.keys():
         abort(400, 'Missing name')
@@ -70,9 +69,8 @@ def create_place_obj(city_id):
                  strict_slashes=False)
 def update_place_obj(place_id):
     """ Updates a place by its id. """
-    try:
-        data = request.get_json()
-    except:
+    data = request.get_json()
+    if data is None:
         abort(400, 'Not a JSON')
     ignored_keys = ["id", "user_id", "city_id", "created_at", "updated_at"]
     place = storage.get(Place, place_id)
