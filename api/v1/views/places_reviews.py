@@ -8,7 +8,7 @@ from models.user import User
 from models import storage
 from models.review import Review
 from api.v1.app import app
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, make_response
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["GET"],
@@ -22,7 +22,7 @@ def return_list_all_reviews_by_city(place_id):
     list_of_json_reviews = []
     for review in list_reviews:
         list_of_json_reviews.append(review.to_dict())
-    return(jsonify(list_of_json_reviews))
+    return(jsonify(list_of_json_reviews), 200)
 
 
 @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
@@ -31,7 +31,7 @@ def return_review_by_id(review_id):
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    return(jsonify(review.to_dict()))
+    return(jsonify(review.to_dict()), 200)
 
 
 @app_views.route("/reviews/<review_id>", methods=["DELETE"],
@@ -42,7 +42,7 @@ def delete_review_obj(review_id):
     if review:
         storage.delete(review)
         storage.save()
-        return({})
+        return({}, 200)
     abort(404)
 
 
@@ -54,7 +54,7 @@ def create_review_obj(place_id):
     if storage.get(Place, place_id) is None:
         abort(404)
     if data is None:
-        abort(400, 'Not a JSON')
+        make_response('Not a JSON', 400)
     if 'user_id' not in data.keys():
         abort(400, 'Missing user_id')
     if storage.get(User, data['user_id']) is None:
@@ -76,10 +76,10 @@ def update_review_obj(review_id):
         abort(404)
     data = request.get_json()
     if data is None:
-        abort(400, 'Not a JSON')
+        make_response('Not a JSON', 400)
     ignored_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
     for key, value in data.items():
         if key not in ignored_keys:
             setattr(review, key, value)
     review.save()
-    return(jsonify(review.to_dict()))
+    return(jsonify(review.to_dict()), 200)
