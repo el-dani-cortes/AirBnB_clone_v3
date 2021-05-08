@@ -7,7 +7,6 @@ from models.place import Place
 from models.user import User
 from models import storage
 from models.review import Review
-from api.v1.app import app
 from flask import request, jsonify, abort, make_response
 
 
@@ -35,27 +34,16 @@ def return_review_by_id(review_id):
     return(jsonify(review.to_dict()), 200)
 
 
-@app_views.route('/reviews/<review_id>', methods=['DELETE'],
+@app_views.route("/reviews/<review_id>", methods=["DELETE"],
                  strict_slashes=False)
-def route_delete(review_id=None):
-    """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
+def delete_review_obj(review_id):
+    """ Deletes a review object by id. """
     review = storage.get(Review, review_id)
-    if review is None:
-        abort(404)
-    storage.delete(review)
-    storage.save()
-    return jsonify({})
-
-# @app_views.route("/reviews/<review_id>", methods=["DELETE"],
-#                  strict_slashes=False)
-# def delete_review_obj(review_id):
-#     """ Deletes a review object by id. """
-#     review = storage.get(Review, review_id)
-#     if review:
-#         storage.delete(review)
-#         storage.save()
-#         return({}, 200)
-#     abort(404)
+    if review:
+        storage.delete(review)
+        storage.save()
+        return({}, 200)
+    abort(404)
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
