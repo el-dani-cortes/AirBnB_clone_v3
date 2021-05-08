@@ -11,18 +11,32 @@ from api.v1.app import app
 from flask import request, jsonify, abort, make_response
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET"],
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
                  strict_slashes=False)
-def return_list_all_reviews_by_city(place_id):
-    """ Returns reviews by place id. """
-    place = storage.get(Place, place_id)
-    if place is None:
-        abort(404)
-    list_reviews = place.reviews
-    list_of_json_reviews = []
-    for review in list_reviews:
-        list_of_json_reviews.append(review.to_dict())
-    return(jsonify(list_of_json_reviews), 200)
+def route_users(place_id=None):
+    """ place route """
+    if place_id is not None:
+        place = storage.get(Place, place_id)
+        if place is None:
+            abort(404)
+        new_list = []
+        for review in place.reviews:
+            new_list.append(review.to_dict())
+        return jsonify(new_list)
+    abort(404)
+
+# @app_views.route("/places/<place_id>/reviews", methods=["GET"],
+#                  strict_slashes=False)
+# def return_list_all_reviews_by_city(place_id):
+#     """ Returns reviews by place id. """
+#     place = storage.get(Place, place_id)
+#     if place is None:
+#         abort(404)
+#     list_reviews = place.reviews
+#     list_of_json_reviews = []
+#     for review in list_reviews:
+#         list_of_json_reviews.append(review.to_dict())
+#     return(jsonify(list_of_json_reviews), 200)
 
 
 @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
