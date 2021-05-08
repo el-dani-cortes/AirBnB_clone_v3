@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """ Flask blueprint module and class objects routes. """
 from flask import Blueprint
 
