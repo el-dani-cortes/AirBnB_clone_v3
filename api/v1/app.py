@@ -18,7 +18,7 @@ def close_connection(exception):
 @app.errorhandler(404)
 def page_not_found(e):
     """ Error handler 404, for Not found response."""
-    return make_response(jsonify({"error": "Not found"}), 404)
+    return make_response({"error": "Not found"}, 404)
 
 if __name__ == "__main__":
     host = "0.0.0.0"
