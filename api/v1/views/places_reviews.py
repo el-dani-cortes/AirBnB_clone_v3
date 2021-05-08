@@ -25,35 +25,37 @@ def return_list_all_reviews_by_city(place_id):
     return(jsonify(list_of_json_reviews), 200)
 
 
-@app_views.route('/reviews/<review_id>', methods=['GET'],
+@app_views.route("/reviews/<review_id>", methods=["GET"],
                  strict_slashes=False)
-def route_review(review_id=None):
+def return_review_by_id(review_id):
+    """ Returns review by id. """
+    review = storage.get(Review, review_id)
+    if review is None:
+        abort(404)
+    return(jsonify(review.to_dict()), 200)
+
+
+@app_views.route('/reviews/<review_id>', methods=['DELETE'],
+                 strict_slashes=False)
+def route_delete(review_id=None):
     """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    return(review.to_dict())
+    storage.delete(review)
+    storage.save()
+    return jsonify({})
 
-
-# @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
-# def return_review_by_id(review_id):
-#     """ Returns review by id. """
+# @app_views.route("/reviews/<review_id>", methods=["DELETE"],
+#                  strict_slashes=False)
+# def delete_review_obj(review_id):
+#     """ Deletes a review object by id. """
 #     review = storage.get(Review, review_id)
-#     if review is None:
-#         abort(404)
-#     return(jsonify(review.to_dict()), 200)
-
-
-@app_views.route("/reviews/<review_id>", methods=["DELETE"],
-                 strict_slashes=False)
-def delete_review_obj(review_id):
-    """ Deletes a review object by id. """
-    review = storage.get(Review, review_id)
-    if review:
-        storage.delete(review)
-        storage.save()
-        return({}, 200)
-    abort(404)
+#     if review:
+#         storage.delete(review)
+#         storage.save()
+#         return({}, 200)
+#     abort(404)
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
