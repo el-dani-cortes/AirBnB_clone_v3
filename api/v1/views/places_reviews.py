@@ -35,48 +35,63 @@ def return_review_by_id(review_id):
     return(jsonify(review.to_dict()), 200)
 
 
-@app_views.route('/reviews/<review_id>', methods=['DELETE'],
+@app_views.route("/reviews/<review_id>", methods=["DELETE"],
                  strict_slashes=False)
-def route_delete(review_id=None):
-    """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
+def delete_review_obj(review_id):
+    """ Deletes a review object by id. """
     review = storage.get(Review, review_id)
-    if review is None:
-        abort(404)
-    storage.delete(review)
-    storage.save()
-    return jsonify({})
-
-# @app_views.route("/reviews/<review_id>", methods=["DELETE"],
-#                  strict_slashes=False)
-# def delete_review_obj(review_id):
-#     """ Deletes a review object by id. """
-#     review = storage.get(Review, review_id)
-#     if review:
-#         storage.delete(review)
-#         storage.save()
-#         return({}, 200)
-#     abort(404)
+    if review:
+        storage.delete(review)
+        storage.save()
+        return({}, 200)
+    abort(404)
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["POST"],
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
                  strict_slashes=False)
-def create_review_obj(place_id):
-    """ Creates a new review linked to a place. """
-    if storage.get(Place, place_id) is None:
+def route_place_post(place_id):
+    """State POST Route 32c11d3d-99a1-4406-ab41-7b6ccb7dd760 user
+     place 3ebfaf23-cede-4cf0-964d-8afc17b11d02
+    """
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
-    data = request.get_json()
-    if data is None:
-        return(make_response('Not a JSON', 400))
-    if 'user_id' not in data:
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
+    if 'user_id' not in obj:
         abort(400, 'Missing user_id')
-    if storage.get(User, data['user_id']) is None:
+    user = storage.get(User, obj['user_id'])
+    if user is None:
         abort(404)
-    if 'text' not in data:
+    if 'text' not in obj:
         abort(400, 'Missing text')
-    data['place_id'] = place_id
-    review = Review(**data)
-    review.save()
-    return(make_response(jsonify(review.to_dict()), 201))
+    obj['place_id'] = place_id
+    review = Review(**obj)
+    storage.new(review)
+    storage.save()
+    return make_response(jsonify(review.to_dict()), 201)
+
+
+# @app_views.route("/places/<place_id>/reviews", methods=["POST"],
+#                  strict_slashes=False)
+# def create_review_obj(place_id):
+#     """ Creates a new review linked to a place. """
+#     if storage.get(Place, place_id) is None:
+#         abort(404)
+#     data = request.get_json()
+#     if data is None:
+#         return(make_response('Not a JSON', 400))
+#     if 'user_id' not in data:
+#         abort(400, 'Missing user_id')
+#     if storage.get(User, data['user_id']) is None:
+#         abort(404)
+#     if 'text' not in data:
+#         abort(400, 'Missing text')
+#     data['place_id'] = place_id
+#     review = Review(**data)
+#     review.save()
+#     return(make_response(jsonify(review.to_dict()), 201))
 
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"],
