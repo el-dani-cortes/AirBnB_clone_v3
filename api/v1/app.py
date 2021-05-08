@@ -9,16 +9,16 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    """ Error handler 404"""
-    return make_response(jsonify({"error": "Not found"}), 404)
-
-
 @app.teardown_appcontext
 def close_connection(exception):
     """ Closes the session's connection. """
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """ Error handler 404"""
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 if __name__ == "__main__":
     host = "0.0.0.0"
