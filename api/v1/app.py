@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """ Flask module, returns status of the api. """
-from flask import Flask
-from models import storage
-from os import getenv as env
 from api.v1.views import app_views
+from os import getenv as env
+from models import storage
+from flask import Flask
+
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -25,4 +26,4 @@ def page_not_found(e):
 if __name__ == "__main__":
     host = env("HBNB_API_HOST", "0.0.0.0")
     port = int(env("HBNB_API_PORT", "5000"))
-    app.run(host=host, port=port, threaded=True)
+    app.run(host=host, port=port, threaded=True, debug=True)
