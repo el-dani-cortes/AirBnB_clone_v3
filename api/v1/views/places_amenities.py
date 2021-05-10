@@ -4,6 +4,7 @@ from flask import request, jsonify, abort
 from api.v1.views import app_views
 from models.amenity import Amenity
 from models.place import Place
+from os import getenv as env
 from models import storage
 
 
@@ -35,11 +36,20 @@ def delete_place_amenity_obj(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    if amenity not in place.amenities:
+    if env("HBNB_TYPE_STORAGE") == "db":
+        if amenity not in place.amenities:
+            return(404)
+        place.amenities.remove(amenity)
+        place.save()
+        return({})
+    else:
+        if hasattr(place, "amenity_ids"):
+            if amenity.id in place.amenity_ids:
+                place.amenity_ids.remove(amenity.id)
+                place.save()
+                return({})
         return(404)
-    place.amenities.remove(amenity)
-    place.save()
-    return({})
+
 
 # POST Route, spaced out due to pep8 style.
 route = "/places/<place_id>/amenities/<amenity_id>"
@@ -55,8 +65,17 @@ def add_amenity_to_place(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    if amenity in place.amenities:
-        return(amenity.to_dict(), 201)
-    place.amenities.append(amenity)
-    place.save()
-    return(amenity.to_dict())
+    if env("HBNB_TYPE_STORAGE") == "db":
+        if amenity in place.amenities:
+            return(amenity.to_dict(), 201)
+        place.amenities.append(amenity)
+        place.save()
+        return(amenity.to_dict())
+    else:
+        if hasattr(place, "amenity_ids"):
+            if amenity.id in place.amenity_ids:
+                return(amenity.to_dict(), 201)
+        setattr(place, "amenity_ids", [])
+        place.amenity_ids.append(amenity.id)
+        place.save()
+        return(amenity.to_dict())
