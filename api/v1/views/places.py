@@ -94,13 +94,12 @@ def search_places_obj():
             result_list.append(place.to_dict())
         return jsonify(result_list)
     else:
-        for key, value in data.items():
-            if key == "states" and len(value) != 0:
-                has_states_values = 1
-            if key == "cities" and len(value) != 0:
-                has_cities_values = 1
-            if key == "amenities" and len(value) != 0:
-                has_amenities_values = 1
+        if "states" in data and len(data["states"]) != 0:
+            has_states_values = 1
+        if "cities" in data and len(data["cities"]) != 0:
+            has_cities_values = 1
+        if "amenities" in data and len(data["amenities"]) != 0:
+            has_amenities_values = 1
         if has_states_values == 0 and has_cities_values == 0:
             for place in storage.all(Place):
                 if has_amenities_values == 0:
@@ -109,7 +108,7 @@ def search_places_obj():
                     for amenity in place.amenities:
                         if amenity.id in data["amenities"]:
                             result_list.append(place.to_dict())
-                return jsonify(result_list)
+            return jsonify(result_list)
         elif has_states_values != 0 and has_cities_values == 0:
             for value in data["states"]:
                 state = storage.get(State, value)
@@ -119,7 +118,8 @@ def search_places_obj():
                     for place in places:
                         result_list.append(place)
         elif has_states_values == 0 and has_cities_values != 0:
-            for city in data["cities"]:
+            for city_id in data["cities"]:
+                city = storage.get(City, city_id)
                 places = city.places
                 for place in places:
                     result_list.append(place)
