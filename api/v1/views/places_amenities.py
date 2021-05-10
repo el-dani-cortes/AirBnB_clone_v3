@@ -36,19 +36,19 @@ def delete_place_amenity_obj(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    if env("HBNB_TYPE_STORAGE") == "db":
-        if amenity not in place.amenities:
-            return(404)
-        place.amenities.remove(amenity)
-        place.save()
-        return({})
-    else:
-        if hasattr(place, "amenity_ids"):
-            if amenity.id in place.amenity_ids:
-                place.amenity_ids.remove(amenity.id)
-                place.save()
-                return({})
+    # if env("HBNB_TYPE_STORAGE") == "db":
+    if amenity not in place.amenities:
         return(404)
+    place.amenities.remove(amenity)
+    place.save()
+    return({})
+    # else:
+    #     if hasattr(place, "amenity_ids"):
+    #         if amenity.id in place.amenity_ids:
+    #             place.amenity_ids.remove(amenity.id)
+    #             place.save()
+    #             return({})
+    #     return(404)
 
 
 # POST Route, spaced out due to pep8 style.
@@ -65,17 +65,17 @@ def add_amenity_to_place(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    if env("HBNB_TYPE_STORAGE") == "db":
-        if amenity in place.amenities:
-            return(amenity.to_dict())
-        place.amenities.append(amenity)
-        place.save()
-        return(amenity.to_dict(), 201)
-    else:
-        if hasattr(place, "amenity_ids"):
-            if amenity.id in place.amenity_ids:
-                return(amenity.to_dict())
-        setattr(place, "amenity_ids", [])
-        place.amenity_ids.append(amenity.id)
-        place.save()
-        return(amenity.to_dict(), 201)
+    # if env("HBNB_TYPE_STORAGE") == "db":
+    if amenity in place.amenities:
+        return(amenity.to_dict())
+    place.amenities.append(amenity)
+    place.save()
+    return(amenity.to_dict(), 201)
+    # else:
+    #     if hasattr(place, "amenity_ids"):
+    #         if amenity.id in place.amenity_ids:
+    #             return(amenity.to_dict())
+    #     setattr(place, "amenity_ids", [])
+    #     place.amenity_ids.append(amenity.id)
+    #     place.save()
+    #     return(amenity.to_dict(), 201)
