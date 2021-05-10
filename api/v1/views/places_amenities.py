@@ -21,8 +21,11 @@ def return_list_all_amenities_by_place(place_id):
     return(jsonify(list_of_json_amenities))
 
 
-# Amenity by id in place route. - - - - - - - - - - - - - - - - - - - - - - - |
+# DELETE Route, spaced out due to pep8 style.
 route = "/places/<place_id>/amenities/<amenity_id>"
+
+
+# Amenity by id in place route. - - - - - - - - - - - - - - - - - - - - - - - |
 @app_views.route(route, methods=["DELETE"])
 def delete_place_amenity_obj(place_id, amenity_id):
     """ Deletes an amenity on a place. """
@@ -38,9 +41,11 @@ def delete_place_amenity_obj(place_id, amenity_id):
     place.save()
     return({})
 
+# POST Route, spaced out due to pep8 style.
+route = "/places/<place_id>/amenities/<amenity_id>"
+
 
 # POST Amenity by id into place. - - - - - - - - - - - - - - - - - - - - - - -|
-route = "/places/<place_id>/amenities/<amenity_id>"
 @app_views.route(route, methods=["POST"])
 def add_amenity_to_place(place_id, amenity_id):
     """ Adds an amenity to the given place. """
