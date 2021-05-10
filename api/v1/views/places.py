@@ -122,15 +122,16 @@ def search_places_obj():
                 state = storage.get(State, value)
                 cities = state.cities
                 for city in cities:
-                    places = city.places
-                    for place in places:
-                        result_list.append(place)
-            for value in data["cities"]:
-                for city in cities:
-                    if value != city.id:
+                    if city.id not in data["cities"]:
                         places = city.places
                         for place in places:
                             result_list.append(place)
+            for value in data["cities"]:
+                city = storage.get(City, value)
+                for city in cities:
+                    places = city.places
+                    for place in places:
+                        result_list.append(place)
 
         # Filter for amenities
         if has_amenities_values != 0:
