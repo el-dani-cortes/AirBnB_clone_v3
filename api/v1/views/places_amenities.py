@@ -67,15 +67,15 @@ def add_amenity_to_place(place_id, amenity_id):
         abort(404)
     if env("HBNB_TYPE_STORAGE") == "db":
         if amenity in place.amenities:
-            return(amenity.to_dict(), 201)
+            return(amenity.to_dict())
         place.amenities.append(amenity)
         place.save()
-        return(amenity.to_dict())
+        return(amenity.to_dict(), 201)
     else:
         if hasattr(place, "amenity_ids"):
             if amenity.id in place.amenity_ids:
-                return(amenity.to_dict(), 201)
+                return(amenity.to_dict())
         setattr(place, "amenity_ids", [])
         place.amenity_ids.append(amenity.id)
         place.save()
-        return(amenity.to_dict())
+        return(amenity.to_dict(), 201)
