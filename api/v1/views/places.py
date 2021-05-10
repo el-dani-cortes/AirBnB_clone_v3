@@ -90,7 +90,7 @@ def search_places_obj():
     if data is None:
         abort(400, 'Not a JSON')
     if bool(data) is False:
-        for place in storage.all(Place):
+        for place in storage.all(Place).values():
             result_list.append(place.to_dict())
         return jsonify(result_list)
     else:
@@ -101,14 +101,8 @@ def search_places_obj():
         if "amenities" in data and len(data["amenities"]) != 0:
             has_amenities_values = 1
         if has_states_values == 0 and has_cities_values == 0:
-            for place in storage.all(Place):
-                if has_amenities_values == 0:
-                    result_list.append(place.to_dict())
-                else:
-                    for amenity in place.amenities:
-                        if amenity.id in data["amenities"]:
-                            result_list.append(place.to_dict())
-            return jsonify(result_list)
+            for place in storage.all(Place).values():
+                result_list.append(place)
         elif has_states_values != 0 and has_cities_values == 0:
             for value in data["states"]:
                 state = storage.get(State, value)
@@ -145,6 +139,7 @@ def search_places_obj():
                 for amenity in amenities:
                     if amenity.id not in data["amenities"]:
                         result_list.remove(place)
+                        break
         result = []
         for place in result_list:
             result.append(place.to_dict())
