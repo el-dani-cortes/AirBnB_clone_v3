@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to amenities. """
+from flask import request, jsonify, abort
 from api.v1.views import app_views
 from models.amenity import Amenity
 from models.review import Review
@@ -9,10 +10,9 @@ from models.city import City
 from models.user import User
 from models import storage
 import api.v1.app
-from flask import request, jsonify, abort
 
 
-@app_views.route("/amenities", methods=["GET"], strict_slashes=False)
+@app_views.route("/amenities", methods=["GET"])
 def return_list_all_amenities():
     """ Returns list of amenities. """
     all_amenities = storage.all(Amenity)
@@ -22,8 +22,7 @@ def return_list_all_amenities():
     return(jsonify(list_all_amenities))
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["GET"],
-                 strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>", methods=["GET"])
 def return_amenity_obj(amenity_id):
     """ Returns an Amenity object. """
     obj_amenity = storage.get(Amenity, amenity_id)
@@ -32,8 +31,7 @@ def return_amenity_obj(amenity_id):
     abort(404)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["DELETE"],
-                 strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>", methods=["DELETE"])
 def delete_amenity_obj(amenity_id):
     """ deletes a amenity object by id. """
     obj_amenity = storage.get(Amenity, amenity_id)
@@ -45,7 +43,7 @@ def delete_amenity_obj(amenity_id):
     abort(404)
 
 
-@app_views.route("/amenities", methods=["POST"], strict_slashes=False)
+@app_views.route("/amenities", methods=["POST"])
 def create_amenity_obj():
     """ Creates a Amenity object. """
     data = request.get_json()
@@ -59,8 +57,7 @@ def create_amenity_obj():
         return(jsonify(amenity_obj.to_dict()), 201)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["PUT"],
-                 strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>", methods=["PUT"])
 def update_amenity_obj(amenity_id):
     """ Updates an Amenity object. """
     data = request.get_json()

@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 """ Module for storing indeces for the route to reviews. """
+from flask import request, jsonify, abort, make_response
 from api.v1.views import app_views
+from models.review import Review
 from models.place import Place
 from models.user import User
 from models import storage
-from models.review import Review
-from flask import request, jsonify, abort, make_response
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET"],
-                 strict_slashes=False)
+@app_views.route("/places/<place_id>/reviews", methods=["GET"])
 def return_list_all_reviews_by_city(place_id):
     """ Returns reviews by place id. """
     place = storage.get(Place, place_id)
@@ -22,8 +21,7 @@ def return_list_all_reviews_by_city(place_id):
     return(jsonify(list_of_json_reviews), 200)
 
 
-@app_views.route("/reviews/<review_id>", methods=["GET"],
-                 strict_slashes=False)
+@app_views.route("/reviews/<review_id>", methods=["GET"])
 def return_review_by_id(review_id):
     """ Returns review by id. """
     review = storage.get(Review, review_id)
@@ -32,8 +30,7 @@ def return_review_by_id(review_id):
     return(jsonify(review.to_dict()), 200)
 
 
-@app_views.route("/reviews/<review_id>", methods=["DELETE"],
-                 strict_slashes=False)
+@app_views.route("/reviews/<review_id>", methods=["DELETE"])
 def delete_review_obj(review_id):
     """ Deletes a review object by id. """
     review = storage.get(Review, review_id)
@@ -44,8 +41,7 @@ def delete_review_obj(review_id):
     abort(404)
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["POST"],
-                 strict_slashes=False)
+@app_views.route("/places/<place_id>/reviews", methods=["POST"])
 def create_review_obj(place_id):
     """ Creates a new review linked to a place. """
     if storage.get(Place, place_id) is None:
@@ -65,8 +61,7 @@ def create_review_obj(place_id):
     return(make_response(jsonify(review.to_dict()), 201))
 
 
-@app_views.route("/reviews/<review_id>", methods=["PUT"],
-                 strict_slashes=False)
+@app_views.route("/reviews/<review_id>", methods=["PUT"])
 def update_review_obj(review_id):
     """ Updates a review by its id. """
     review = storage.get(Review, review_id)
