@@ -136,9 +136,10 @@ def search_places_obj():
         # Filter for amenities
         result = []
         amenity_list = []
-        for amenity_id in data["amenities"]:
-            amenity = storage.get(Amenity, amenity_id)
-            amenity_list.append(amenity)
+        if has_amenities_values != 0:
+            for amenity_id in data["amenities"]:
+                amenity = storage.get(Amenity, amenity_id)
+                amenity_list.append(amenity)
         for place in result_list:
             result.append(place.to_dict())
             if has_amenities_values != 0:
