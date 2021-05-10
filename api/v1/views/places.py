@@ -6,6 +6,7 @@ from models.place import Place
 from models.state import State
 from models.city import City
 from models.user import User
+from models.amenity import Amenity
 from models import storage
 
 
@@ -118,30 +119,32 @@ def search_places_obj():
                 for place in places:
                     result_list.append(place)
         elif has_states_values != 0 and has_cities_values != 0:
+            cities_list = []
             for value in data["states"]:
                 state = storage.get(State, value)
                 cities = state.cities
                 for city in cities:
-                    if city.id not in data["cities"]:
-                        places = city.places
-                        for place in places:
-                            result_list.append(place)
-            for value in data["cities"]:
-                city = storage.get(City, value)
-                for city in cities:
-                    places = city.places
-                    for place in places:
-                        result_list.append(place)
-
+                    cities_list.append(city)
+            for city_id in data["cities"]:
+                city = storage.get(City, city_id)
+                if city not in cities_list:
+                    cities_list.append(city)
+            for city in cities_list:
+                places = city.places
+                for place in places:
+                    result_list.append(place)
         # Filter for amenities
-        if has_amenities_values != 0:
-            for place in result_list:
-                amenities = place.amenities
-                for amenity in amenities:
-                    if amenity.id not in data["amenities"]:
-                        result_list.remove(place)
-                        break
         result = []
+        amenity_list = []
+        for amenity_id in data["amenities"]:
+            amenity = storage.get(Amenity, amenity_id)
+            amenity_list.append(amenity)
         for place in result_list:
             result.append(place.to_dict())
+            if has_amenities_values != 0:
+                amenities = place.amenities
+                for amenity in amenity_list:
+                    if amenity not in amenities:
+                        result.pop()
+                        break
         return jsonify(result)
