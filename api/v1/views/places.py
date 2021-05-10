@@ -103,8 +103,13 @@ def search_places_obj():
                 has_amenities_values = 1
         if has_states_values == 0 and has_cities_values == 0:
             for place in storage.all(Place):
-                result_list.append(place.to_dict())
-            return jsonify(storage.all(Place))
+                if has_amenities_values == 0:
+                    result_list.append(place.to_dict())
+                else:
+                    for amenity in place.amenities:
+                        if amenity.id in data["amenities"]:
+                            result_list.append(place.to_dict())
+                return jsonify(result_list)
         elif has_states_values != 0 and has_cities_values == 0:
             for value in data["states"]:
                 state = storage.get(State, value)
