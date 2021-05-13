@@ -157,8 +157,7 @@ No known bugs at this time.
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 Daniel Cortes - [Github](https://github.com/el-dani-cortes) / [Twitter](https://twitter.com/El_Dani_Cortes)  
-Diego Lopez - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/LopezDfelo93
-)  
+Diego Lopez - [Github](https://github.com/DiegoCol93) / [Twitter](https://twitter.com/LopezDfelo93)  
 
 
 Second part of Airbnb: Joann Vuong
